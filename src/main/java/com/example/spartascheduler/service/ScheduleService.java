@@ -32,7 +32,7 @@ public class ScheduleService {
         return scheduleRepository.findAll().stream()
                 //name null 판단
                 .filter(schedule-> name == null || schedule.getName().equals(name))
-                //오름차순
+                //내림차순
                 .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
                 //dto로 변환
                 .map(ScheduleResponseDto::new)
