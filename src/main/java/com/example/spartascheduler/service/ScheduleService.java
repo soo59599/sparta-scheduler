@@ -21,22 +21,29 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
-        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContents());
+        Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getTitle(), dto.getContents());
         scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule);
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> findAllSchedules() {
-        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAll());
+    public List<ScheduleResponseDto> findAllSchedules(String name) {
+        List<Schedule> schedules = new ArrayList<>();
+        if (name == null) {
+            schedules.addAll(scheduleRepository.findAll());
+        } else {
+            scheduleRepository.findAll().stream().filter(schedule -> schedule.getName().equals(name)).forEach(schedules::add);
+        }
+
         return schedules.stream().map(ScheduleResponseDto::new).toList();
+
     }
 
     @Transactional(readOnly = true)
     public ScheduleResponseDto findScheduleById(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
+        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
     }
 
     @Transactional
@@ -48,7 +55,7 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
 
-        if(!schedule.getPassword().equals(dto.getPassword())) {
+        if (!schedule.getPassword().equals(dto.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
         }
 
@@ -61,7 +68,7 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
 
-        if(!schedule.getPassword().equals(dto.getPassword())) {
+        if (!schedule.getPassword().equals(dto.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
         }
 
