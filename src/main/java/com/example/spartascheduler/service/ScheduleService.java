@@ -38,4 +38,22 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
     }
+
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto dto) {
+
+        if (dto.getTitle() == null && dto.getName() == null) {
+            throw new IllegalArgumentException("수정할 데이터가 없습니다.");
+        }
+
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+
+        if(!schedule.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
+        }
+
+        schedule.updateTitleAndName(dto.getTitle(), dto.getName());
+
+        return new ScheduleResponseDto(schedule);
+    }
 }
