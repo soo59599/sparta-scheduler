@@ -1,5 +1,7 @@
 package com.example.spartascheduler.service;
 
+import com.example.spartascheduler.dto.ScheduleRequestDto;
+import com.example.spartascheduler.dto.ScheduleResponseDto;
 import com.example.spartascheduler.entity.Schedule;
 import com.example.spartascheduler.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,11 @@ public class ScheduleService {
 
 
     @Transactional
-    public Schedule save(@RequestBody Schedule schedule) {
-        return scheduleRepository.save(schedule);
+    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto dto) {
+        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContents());
+        scheduleRepository.save(schedule);
+
+        return new ScheduleResponseDto(schedule);
     }
 
 }
