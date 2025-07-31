@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -24,4 +27,9 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> findAllSchedules() {
+        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAll());
+        return schedules.stream().map(ScheduleResponseDto::new).toList();
+    }
 }
