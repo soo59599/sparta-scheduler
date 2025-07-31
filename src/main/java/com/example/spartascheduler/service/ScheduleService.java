@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -29,15 +29,14 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findAllSchedules(String name) {
-        List<Schedule> schedules = new ArrayList<>();
-        if (name == null) {
-            schedules.addAll(scheduleRepository.findAll());
-        } else {
-            scheduleRepository.findAll().stream().filter(schedule -> schedule.getName().equals(name)).forEach(schedules::add);
-        }
-
-        return schedules.stream().map(ScheduleResponseDto::new).toList();
-
+        return scheduleRepository.findAll().stream()
+                //name null 판단
+                .filter(schedule-> name == null || schedule.getName().equals(name))
+                //오름차순
+                .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
+                //dto로 변환
+                .map(ScheduleResponseDto::new)
+                .toList();
     }
 
     @Transactional(readOnly = true)
