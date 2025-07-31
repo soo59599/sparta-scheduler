@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule  {
+public class Schedule extends BaseEntity  {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
