@@ -1,0 +1,29 @@
+name: 🐛 버그 제보
+description: 버그를 발견했을 때 작성해주세요
+title: "[BUG] "
+labels: [bug]
+
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: 버그 요약
+      description: 어떤 문제가 발생했는지 간단히 설명해주세요
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      description: 버그를 재현하려면 어떤 절차가 필요한가요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+      description: 원래는 어떻게 작동했어야 하나요?
+    validations:
+      required: false

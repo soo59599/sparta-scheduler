@@ -1,0 +1,64 @@
+name: "✅ 일정관리앱 요구사항 체크리스트"
+about: 일정관리앱 기능 구현을 위한 요구사항을 확인하는 체크리스트입니다.
+title: "[일정관리앱] 기능 구현 체크리스트"
+labels: ''
+assignees: soo59599
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 목표
+        - 사용자가 일정을 생성, 조회, 수정, 삭제할 수 있어야 한다
+        - 일정 데이터는 DB에 저장되고, 화면에 최신 상태로 표시되어야 한다
+        - 예외 상황(빈 입력, 날짜 오류 등)을 적절히 처리해야 한다
+
+  - type: checkboxes
+    id: core_features
+    attributes:
+      label: 💻 핵심 기능 확인
+      options:
+        - label: 일정 생성 기능 정상 동작
+          value: create_schedule
+        - label: 일정 조회 기능 정상 동작
+          value: read_schedule
+        - label: 일정 수정 기능 정상 동작
+          value: update_schedule
+        - label: 일정 삭제 기능 정상 동작
+          value: delete_schedule
+    validations:
+      required: true
+      min_selected: 4
+
+  - type: checkboxes
+    id: error_handling
+    attributes:
+      label: ⚠️ 예외 처리 확인
+      options:
+        - label: 빈 입력 값 처리됨
+          value: empty_input
+        - label: 날짜 형식 오류 처리됨
+          value: invalid_date
+    validations:
+      required: true
+      min_selected: 2
+
+  - type: checkboxes
+    id: submission_checks
+    attributes:
+      label: 💬 제출 체크리스트
+      options:
+        - label: 제출 마감일 이전 업로드 완료
+          value: uploaded_on_time
+        - label: 제출 관련 링크 또는 자료 포함
+          value: submission_link
+    validations:
+      required: true
+      min_selected: 2
+
+  - type: markdown
+    attributes:
+      value: |
+        > 작성자: `@soo59599`
+        > 프로젝트: 일정관리앱
+        > 제출일: `2025-07-31`
