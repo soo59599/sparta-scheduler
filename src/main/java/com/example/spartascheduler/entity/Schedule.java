@@ -28,6 +28,15 @@ public class Schedule extends BaseEntity  {
         this.contents = contents;
     }
 
+    public void updateTitleAndName(String title, String name){
+        if(title!=null){
+            this.title = title;
+        }
+        if(name!=null){
+            this.name = name;
+        }
+    }
+
 
 
 
