@@ -4,26 +4,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class Schedule  {
+public class Schedule extends BaseEntity  {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String name;
+    private String password;
 
+    private String title;
     private String contents;
 
-    private String name;
+    public Schedule(String name, String password, String title, String contents) {
+        this.name = name;
+        this.password = password;
+        this.title = title;
+        this.contents = contents;
+    }
 
-    private String password;
+
 
 
 
