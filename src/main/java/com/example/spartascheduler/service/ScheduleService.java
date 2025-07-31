@@ -57,9 +57,13 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
-    public void deleteSchedule(Long id) {
+    public void deleteSchedule(Long id, ScheduleRequestDto dto) {
 
-        scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+
+        if(!schedule.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
+        }
 
         scheduleRepository.deleteById(id);
     }
