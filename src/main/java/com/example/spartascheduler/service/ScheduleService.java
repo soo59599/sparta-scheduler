@@ -4,6 +4,7 @@ import com.example.spartascheduler.dto.ScheduleRequestDto;
 import com.example.spartascheduler.dto.ScheduleResponseDto;
 import com.example.spartascheduler.entity.Schedule;
 import com.example.spartascheduler.repository.ScheduleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponseDto findScheduleById(Long id) {
-        return new ScheduleResponseDto(scheduleRepository.findById(id).get());
+
+        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
     }
 }
