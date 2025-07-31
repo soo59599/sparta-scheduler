@@ -1,6 +1,7 @@
 name: "✅ 일정관리앱 과제 체크리스트"
 description: 일정관리앱 과제 제출 전 요구사항을 확인하는 체크리스트입니다.
 title: "[Lv1] 일정관리앱 기본 기능"
+labels: ["과제"]
 assignees:
   - soo59599
 
@@ -20,7 +21,8 @@ body:
         - label: 일정 추가 기능이 정상적으로 동작함
         - label: 일정 수정 기능이 정상적으로 동작함
         - label: 일정 삭제 기능이 정상적으로 동작함
-        - label: 페이지 이동 및 렌더링이 정상적으로 동작함
+        - label: 일정 단건 조회 기능이 정상적으로 동작함
+        - label: 일정 전체 조회 기능이 정상적으로 동작함
 
   - type: checkboxes
     attributes:
