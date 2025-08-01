@@ -1,4 +1,4 @@
-package com.example.spartascheduler.dto;
+package com.example.spartascheduler.dto.schedule;
 
 import com.example.spartascheduler.entity.Schedule;
 import lombok.AllArgsConstructor;

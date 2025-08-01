@@ -1,7 +1,7 @@
 package com.example.spartascheduler.service;
 
-import com.example.spartascheduler.dto.ScheduleRequestDto;
-import com.example.spartascheduler.dto.ScheduleResponseDto;
+import com.example.spartascheduler.dto.schedule.ScheduleRequestDto;
+import com.example.spartascheduler.dto.schedule.ScheduleResponseDto;
 import com.example.spartascheduler.entity.Schedule;
 import com.example.spartascheduler.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;

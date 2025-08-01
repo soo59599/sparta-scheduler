@@ -1,7 +1,7 @@
 package com.example.spartascheduler.controller;
 
-import com.example.spartascheduler.dto.ScheduleRequestDto;
-import com.example.spartascheduler.dto.ScheduleResponseDto;
+import com.example.spartascheduler.dto.schedule.ScheduleRequestDto;
+import com.example.spartascheduler.dto.schedule.ScheduleResponseDto;
 import com.example.spartascheduler.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
