@@ -30,17 +30,17 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findAllSchedules(name), HttpStatus.OK);
     }
 
-    //댓글과 일정 전체 조회
-    @GetMapping("/{id}/with-comments")
-    public ResponseEntity<ScheduleWithCommentsResponseDto> findScheduleByIdWithComment(@PathVariable Long id) {
-        return new ResponseEntity<>(scheduleService.findScheduleByIdWithComment(id), HttpStatus.OK);
-    }
-
     //일정 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
 
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
+    }
+
+    //일정 단건 댓글과 조회
+    @GetMapping("/{id}/with-comments")
+    public ResponseEntity<ScheduleWithCommentsResponseDto> findScheduleByIdWithComment(@PathVariable Long id) {
+        return new ResponseEntity<>(scheduleService.findScheduleByIdWithComment(id), HttpStatus.OK);
     }
 
     //일정 수정
