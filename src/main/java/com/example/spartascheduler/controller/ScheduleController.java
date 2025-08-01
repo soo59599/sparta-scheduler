@@ -54,7 +54,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto dto) {
 
         scheduleService.deleteSchedule(id, dto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
