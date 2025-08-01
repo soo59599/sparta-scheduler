@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -66,8 +65,7 @@ public class ScheduleService {
 
         Schedule schedule = getScheduleById(id);
 
-        List<CommentResponseDto> commentList = new ArrayList<>();
-        commentRepository.findByScheduleId(id).forEach(comment -> commentList.add(new CommentResponseDto(comment)));
+        List<CommentResponseDto> commentList = commentRepository.findByScheduleId(id).stream().map(CommentResponseDto::new).toList();
 
         return new  ScheduleWithCommentsResponseDto(schedule, commentList);
     }
