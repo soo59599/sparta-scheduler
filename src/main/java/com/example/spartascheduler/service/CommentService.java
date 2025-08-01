@@ -19,12 +19,12 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(Long scheduleId, CommentRequestDto dto) {
-        boolean emptySchedule = scheduleRepository.findById(scheduleId).isEmpty();
-        if (emptySchedule) {
+
+        if (!scheduleRepository.existsById(scheduleId)) {
             throw new EntityNotFoundException("해당 일정이 존재하지 않습니다.");
         }
 
-        long count = commentRepository.findAll().stream().filter(comment -> comment.getScheduleId().equals(scheduleId)).count();
+        long count = commentRepository.countByScheduleId(scheduleId);
 
         if(count > 10){
             throw new IllegalArgumentException("한 게시글당 댓글은 10개까지 가능합니다.");
