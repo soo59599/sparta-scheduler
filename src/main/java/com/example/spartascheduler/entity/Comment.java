@@ -23,4 +23,11 @@ public class Comment {
     private String password;
 
     private String content;
+
+    public Comment(Long scheduleId, String name, String password, String content) {
+        this.scheduleId = scheduleId;
+        this.name = name;
+        this.password = password;
+        this.content = content;
+    }
 }
