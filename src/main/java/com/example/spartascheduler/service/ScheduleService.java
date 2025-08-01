@@ -117,7 +117,7 @@ public class ScheduleService {
 
         if (name == null || name.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"이름과 비밀번호는 필수값 입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"작성자 이름과 비밀번호는 필수값 입니다.");
         }
     }
 
