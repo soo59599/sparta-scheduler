@@ -24,6 +24,8 @@ public class CommentService {
             throw new EntityNotFoundException("해당 일정이 존재하지 않습니다.");
         }
 
+        validateComment(dto);
+
         long count = commentRepository.countByScheduleId(scheduleId);
 
         if(count > 10){
@@ -35,5 +37,17 @@ public class CommentService {
         commentRepository.save(comment);
 
         return new CommentResponseDto(comment);
+    }
+
+
+    //댓글 확인
+    private void validateComment(CommentRequestDto dto) {
+        String content = dto.getContent();
+        if (content == null || content.trim().isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용 입력은 필수값 입니다.");
+        }
+        if(content.length()>100){
+            throw new IllegalArgumentException("댓글 내용은 100자 이내로 작성해야 합니다.");
+        }
     }
 }
