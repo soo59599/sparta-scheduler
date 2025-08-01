@@ -19,7 +19,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{scheduleId}/comment")
+    @PostMapping("/{scheduleId}/comments")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long scheduleId, @RequestBody CommentRequestDto dto) {
         return new ResponseEntity<>(commentService.createComment(scheduleId, dto), HttpStatus.CREATED);
     }
