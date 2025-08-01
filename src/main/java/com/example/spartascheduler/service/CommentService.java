@@ -30,7 +30,7 @@ public class CommentService {
 
         long count = commentRepository.countByScheduleId(scheduleId);
 
-        if(count > 10){
+        if(count >= 10){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"한 게시글당 댓글은 10개까지만 작성 가능합니다.");
         }
 
