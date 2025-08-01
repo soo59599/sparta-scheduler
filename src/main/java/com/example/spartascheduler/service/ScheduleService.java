@@ -7,12 +7,12 @@ import com.example.spartascheduler.dto.schedule.ScheduleWithCommentsResponseDto;
 import com.example.spartascheduler.entity.Schedule;
 import com.example.spartascheduler.repository.CommentRepository;
 import com.example.spartascheduler.repository.ScheduleRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final CommentRepository  commentRepository;
+    private final CommentRepository commentRepository;
 
 
     //일정 생성
@@ -48,8 +48,7 @@ public class ScheduleService {
                 //내림차순
                 .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
                 //dto로 변환
-                .map(ScheduleResponseDto::new)
-                .toList();
+                .map(ScheduleResponseDto::new).toList();
     }
 
     //일정 단건 조회
@@ -65,28 +64,30 @@ public class ScheduleService {
 
         Schedule schedule = getScheduleById(id);
 
-        List<CommentResponseDto> commentList = new ArrayList<>();
-        commentRepository.findByScheduleId(id).forEach(comment -> commentList.add(new CommentResponseDto(comment)));
+        List<CommentResponseDto> commentList = commentRepository.findByScheduleId(id).stream().map(CommentResponseDto::new).toList();
 
-        return new  ScheduleWithCommentsResponseDto(schedule, commentList);
+        return new ScheduleWithCommentsResponseDto(schedule, commentList);
     }
 
     //일정 업데이트
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto dto) {
 
+        //입력한 내용이 없을 때
         if (dto.getTitle() == null && dto.getName() == null) {
-            throw new IllegalArgumentException("수정할 데이터가 없습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정할 데이터가 없습니다.");
         }
 
-        if(dto.getTitle()!=null){
+        //제목 예외처리
+        if (dto.getTitle() != null) {
             validateTitle(dto);
         }
 
         Schedule schedule = getScheduleById(id);
 
+        //비밀번호 불일치
         if (!schedule.getPassword().equals(dto.getPassword())) {
-            throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀 번호가 일치하지 않습니다.");
         }
 
         schedule.updateTitleAndName(dto.getTitle(), dto.getName());
@@ -100,15 +101,13 @@ public class ScheduleService {
 
         Schedule schedule = getScheduleById(id);
 
+        //비밀번호 불일치
         if (!schedule.getPassword().equals(dto.getPassword())) {
-            throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀 번호가 일치하지 않습니다.");
         }
 
         scheduleRepository.deleteById(id);
     }
-
-
-
 
 
     //이름과 비밀번호 확인
@@ -116,25 +115,24 @@ public class ScheduleService {
         String name = dto.getName();
         String password = dto.getPassword();
 
-        if (name == null || name.trim().isEmpty() ||
-                password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("이름과 비밀번호는 필수값 입니다.");
+        if (name == null || name.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "작성자 이름과 비밀번호는 필수값 입니다.");
         }
     }
 
     //일정 찾기
     private Schedule getScheduleById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+        return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 존재하지 않습니다."));
     }
 
     //제목 확인
     private void validateTitle(ScheduleRequestDto dto) {
         String title = dto.getTitle();
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("제목 입력은 필수값 입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "제목 입력은 필수값 입니다.");
         }
-        if(title.length()>30){
-            throw new IllegalArgumentException("제목은 30자 이내로 작성해야 합니다.");
+        if (title.length() > 30) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "제목은 30자 이내로 작성해야 합니다.");
         }
     }
 
@@ -142,13 +140,12 @@ public class ScheduleService {
     private void validateContent(ScheduleRequestDto dto) {
         String content = dto.getContent();
         if (content == null || content.trim().isEmpty()) {
-            throw new IllegalArgumentException("일정 입력은 필수값 입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 입력은 필수값 입니다.");
         }
-        if(content.length()>200){
-            throw new IllegalArgumentException("일정은 200자 이내로 작성해야 합니다.");
+        if (content.length() > 200) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정은 200자 이내로 작성해야 합니다.");
         }
     }
-
 
 
 }
