@@ -24,8 +24,11 @@ public class ScheduleService {
     private final CommentRepository  commentRepository;
 
 
+    //일정 생성
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
+
+        validateNameAndPassword(dto);
 
         Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getTitle(), dto.getContent());
 
@@ -34,6 +37,7 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    //일정 전체 조회
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findAllSchedules(String name) {
         return scheduleRepository.findAll().stream()
@@ -46,16 +50,18 @@ public class ScheduleService {
                 .toList();
     }
 
+    //일정 단건 조회
     @Transactional(readOnly = true)
     public ScheduleResponseDto findScheduleById(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
+        return new ScheduleResponseDto(getScheduleById(id));
     }
 
+    //일정 단건 댓글과 조회
     @Transactional(readOnly = true)
     public ScheduleWithCommentsResponseDto findScheduleByIdWithComment(Long id) {
 
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+        Schedule schedule = getScheduleById(id);
 
         List<CommentResponseDto> commentList = new ArrayList<>();
         commentRepository.findByScheduleId(id).forEach(comment -> commentList.add(new CommentResponseDto(comment)));
@@ -63,6 +69,7 @@ public class ScheduleService {
         return new  ScheduleWithCommentsResponseDto(schedule, commentList);
     }
 
+    //일정 업데이트
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto dto) {
 
@@ -70,7 +77,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("수정할 데이터가 없습니다.");
         }
 
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+        Schedule schedule = getScheduleById(id);
 
         if (!schedule.getPassword().equals(dto.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
@@ -81,15 +88,33 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    //일정 삭제
+    @Transactional
     public void deleteSchedule(Long id, ScheduleRequestDto dto) {
 
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+        Schedule schedule = getScheduleById(id);
 
         if (!schedule.getPassword().equals(dto.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
         }
 
         scheduleRepository.deleteById(id);
+    }
+
+    //이름과 비밀번호 확인
+    private void validateNameAndPassword(ScheduleRequestDto dto) {
+        String name = dto.getName();
+        String password = dto.getPassword();
+
+        if (name == null || name.trim().isEmpty() ||
+                password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("이름과 비밀번호는 필수값 입니다.");
+        }
+    }
+
+    //일정 찾기
+    private Schedule getScheduleById(Long id) {
+        return scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
     }
 
 
