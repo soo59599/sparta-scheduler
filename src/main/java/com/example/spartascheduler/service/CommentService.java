@@ -6,6 +6,7 @@ import com.example.spartascheduler.entity.Comment;
 import com.example.spartascheduler.repository.CommentRepository;
 import com.example.spartascheduler.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public CommentResponseDto createComment(Long scheduleId, CommentRequestDto dto) {
         boolean emptySchedule = scheduleRepository.findById(scheduleId).isEmpty();
         if (emptySchedule) {
