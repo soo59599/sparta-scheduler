@@ -48,6 +48,7 @@ Spring Boot 기반 일정 관리 프로젝트입니다. 3 Layer Architecture 구
 - **IDE**: IntelliJ IDEA
 - **Version Control**: Git
 
+---
 
 ## 📁 디렉토리 구조
 
