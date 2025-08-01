@@ -1,14 +1,18 @@
 package com.example.spartascheduler.service;
 
+import com.example.spartascheduler.dto.comment.CommentResponseDto;
 import com.example.spartascheduler.dto.schedule.ScheduleRequestDto;
 import com.example.spartascheduler.dto.schedule.ScheduleResponseDto;
+import com.example.spartascheduler.dto.schedule.ScheduleWithCommentsResponseDto;
 import com.example.spartascheduler.entity.Schedule;
+import com.example.spartascheduler.repository.CommentRepository;
 import com.example.spartascheduler.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,12 +21,13 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository  commentRepository;
 
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
-      
-        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContent());
+
+        Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getTitle(), dto.getContent());
 
         scheduleRepository.save(schedule);
 
@@ -33,7 +38,7 @@ public class ScheduleService {
     public List<ScheduleResponseDto> findAllSchedules(String name) {
         return scheduleRepository.findAll().stream()
                 //name null 판단
-                .filter(schedule-> name == null || schedule.getName().equals(name))
+                .filter(schedule -> name == null || schedule.getName().equals(name))
                 //내림차순
                 .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
                 //dto로 변환
@@ -45,6 +50,17 @@ public class ScheduleService {
     public ScheduleResponseDto findScheduleById(Long id) {
 
         return new ScheduleResponseDto(scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다.")));
+    }
+
+    @Transactional(readOnly = true)
+    public ScheduleWithCommentsResponseDto findScheduleByIdWithComment(Long id) {
+
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
+
+        List<CommentResponseDto> commentList = new ArrayList<>();
+        commentRepository.findByScheduleId(id).forEach(comment -> commentList.add(new CommentResponseDto(comment)));
+
+        return new  ScheduleWithCommentsResponseDto(schedule, commentList);
     }
 
     @Transactional
@@ -75,4 +91,6 @@ public class ScheduleService {
 
         scheduleRepository.deleteById(id);
     }
+
+
 }
