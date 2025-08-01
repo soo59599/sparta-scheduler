@@ -29,6 +29,8 @@ public class ScheduleService {
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
 
         validateNameAndPassword(dto);
+        validateTitle(dto);
+        validateContent(dto);
 
         Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getTitle(), dto.getContent());
 
@@ -77,6 +79,10 @@ public class ScheduleService {
             throw new IllegalArgumentException("수정할 데이터가 없습니다.");
         }
 
+        if(dto.getTitle()!=null){
+            validateTitle(dto);
+        }
+
         Schedule schedule = getScheduleById(id);
 
         if (!schedule.getPassword().equals(dto.getPassword())) {
@@ -101,6 +107,10 @@ public class ScheduleService {
         scheduleRepository.deleteById(id);
     }
 
+
+
+
+
     //이름과 비밀번호 확인
     private void validateNameAndPassword(ScheduleRequestDto dto) {
         String name = dto.getName();
@@ -116,6 +126,29 @@ public class ScheduleService {
     private Schedule getScheduleById(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 일정이 존재하지 않습니다."));
     }
+
+    //제목 확인
+    private void validateTitle(ScheduleRequestDto dto) {
+        String title = dto.getTitle();
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("제목 입력은 필수값 입니다.");
+        }
+        if(title.length()>30){
+            throw new IllegalArgumentException("제목은 30자 이내로 작성해야 합니다.");
+        }
+    }
+
+    //내용 확인
+    private void validateContent(ScheduleRequestDto dto) {
+        String content = dto.getContent();
+        if (content == null || content.trim().isEmpty()) {
+            throw new IllegalArgumentException("일정 입력은 필수값 입니다.");
+        }
+        if(content.length()>200){
+            throw new IllegalArgumentException("일정은 200자 이내로 작성해야 합니다.");
+        }
+    }
+
 
 
 }
