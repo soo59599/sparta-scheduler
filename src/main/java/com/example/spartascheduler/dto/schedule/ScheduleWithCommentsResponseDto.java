@@ -5,6 +5,7 @@ import com.example.spartascheduler.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,9 @@ public class ScheduleWithCommentsResponseDto {
     private String title;
     private String content;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+
     private List<CommentResponseDto>  comments;
 
     public ScheduleWithCommentsResponseDto(Schedule schedule, List<CommentResponseDto> comments) {
@@ -23,6 +27,8 @@ public class ScheduleWithCommentsResponseDto {
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
         this.comments = comments;
+        this.createdAt = schedule.getCreatedAt();
+        this.modifiedAt = schedule.getModifiedAt();
     }
 
 }
