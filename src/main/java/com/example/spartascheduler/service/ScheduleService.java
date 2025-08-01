@@ -21,7 +21,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
-        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContents());
+        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContent());
         scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule);
