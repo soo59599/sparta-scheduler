@@ -1,7 +1,7 @@
 package com.example.spartascheduler.service;
 
-import com.example.spartascheduler.dto.ScheduleRequestDto;
-import com.example.spartascheduler.dto.ScheduleResponseDto;
+import com.example.spartascheduler.dto.schedule.ScheduleRequestDto;
+import com.example.spartascheduler.dto.schedule.ScheduleResponseDto;
 import com.example.spartascheduler.entity.Schedule;
 import com.example.spartascheduler.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,7 +21,9 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
-        Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getTitle(), dto.getContents());
+      
+        Schedule schedule = new Schedule(dto.getName(),dto.getPassword(),dto.getTitle(),dto.getContent());
+
         scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule);

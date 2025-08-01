@@ -1,4 +1,4 @@
-package com.example.spartascheduler.dto;
+package com.example.spartascheduler.dto.schedule;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +11,5 @@ public class ScheduleRequestDto {
     private String password;
 
     private String title;
-    private String contents;
+    private String content;
 }
