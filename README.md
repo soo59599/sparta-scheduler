@@ -120,6 +120,11 @@ com.example.spartascheduler
 
 ---
 
+## 📄 API Flow Chart
+![API Flow Chart](./docs/flowChart.png)
+
+---
+
 ## 🙌 기여자
 | 이름 | 역할 |
 |------|------|
